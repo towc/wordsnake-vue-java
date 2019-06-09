@@ -7,7 +7,7 @@ All important values are hardcoded, under `src/main/java/Config.java`
 I decided that reading from a file/env was trivial and not something I should spend too much time on
 
 | name | default | description |
-| --- | --- | --- | --- |
+| --- | --- | --- |
 | dictionaryLocation | /etc/dictionaries-common/words | line-separated word storage |
 | port | 5000 | api server port |
 | defaultCount | 5 | default number of words returned |
