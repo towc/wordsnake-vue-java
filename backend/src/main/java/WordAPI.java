@@ -9,7 +9,6 @@ import java.util.List;
 import static spark.Spark.*;
 
 public class WordAPI {
-    private static char[] noiseChars = { '-', ':', '~', '.', '#', '!', '+', '(', ')' };
 
     public static void paths() {
         WordProvider.loadWords();
@@ -54,7 +53,7 @@ public class WordAPI {
         int noiseCharCount = (int) Math.floor(getRandomIndex(chars) * Config.noiseRatio);
 
         for(int i = 0; i < noiseCharCount; ++i) {
-            chars.add(getRandomIndex(chars), String.valueOf(getRandomChar(noiseChars)));
+            chars.add(getRandomIndex(chars), String.valueOf(getRandomChar(Config.noiseChars)));
         }
 
         return String.join("", chars);

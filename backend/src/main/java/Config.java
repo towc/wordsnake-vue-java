@@ -7,4 +7,5 @@ public class Config {
     public static int defaultMaxSize = 8;
 
     public static double noiseRatio = .1;
+    public static char[] noiseChars =  ".-~:+!#()".toCharArray();
 }

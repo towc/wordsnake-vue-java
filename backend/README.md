@@ -14,6 +14,7 @@ I decided that reading from a file/env was trivial and not something I should sp
 | defaultMinSize | 4 | default length of shortest word to be returned |
 | defaultMaxSize | 8 | default length of longest word to be returned |
 | noiseRatio | 0.1 | max amount of noise characters to normal response characters (twice expected amount) |
+| noiseChars | `.-~:+!#()` | characters to be inserted as noise |
 
 # endpoints
 specifying count and range:
