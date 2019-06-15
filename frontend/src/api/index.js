@@ -1,3 +1,3 @@
-import config from '../config';
+const config = require('../config').default;
 
-module.exports = config.api.mock ? require('./mock') : require('./real')
+module.exports = config.api.mock ? require('./mock') : require('./real');

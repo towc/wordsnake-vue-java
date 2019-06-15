@@ -3,10 +3,10 @@ import {
   range, randomInt, first, last,
 } from '@/util';
 
-// wait for [40,140] ms, or 0 if node_env is testing
+// wait for [40,140] ms, or 0 if NODE_ENV is 'testing'
 const networkDelay = config.testing
-  ? () => new Promise(res => setTimeout(res, 40 + Math.random() * 100))
-  : () => Promise.resolve();
+  ? () => Promise.resolve()
+  : () => new Promise(res => setTimeout(res, 40 + Math.random() * 100));
 
 // creates ABBBBBXA strings, errors if length <3
 const createWord = len => `A${'B'.repeat(len - 3)}XA`;

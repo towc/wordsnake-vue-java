@@ -185,6 +185,70 @@ describe('util', () => {
         });
       });
     });
+
+    describe('matrixToString', () => {
+      const { matrixToString } = util;
+      it('should concatenate items as strings, separated by newlines for (matrix)', () => {
+        assert.equal(matrixToString(matrix(2, 2, 'x')), 'xx\nxx', 'failed for 2x2 of char');
+        assert.equal(matrixToString(matrix(2, 3, 'x')), 'xx\nxx\nxx', 'failed for 2x3 of char');
+        assert.equal(matrixToString(matrix(2, 3, 1)), '11\n11\n11', 'failed for 2x3 of num');
+        assert.equal(matrixToString([]), '', 'failed for 0x0');
+        assert.lengthOf(matrixToString(matrix(100, 90, 'y')), (100 + 1) * 90 - 1, 'bad length for 100x90');
+      });
+
+      it('should fill falsey values with filler for (matrix, filler)', () => {
+        assert.equal(matrixToString([[1, 0], [0, 1]], ' '), '1 \n 1', 'failed for 2x2 of num, char filler');
+      });
+
+      it('should throw if arg is not a matrix-like', () => {
+        assert.throws(() => matrixToString('hi'), Error, /.*/, 'did not throw for string argument');
+        assert.throws(() => matrixToString(['hi']), Error, /.*/, 'did not throw for string array argument');
+        // [[]] is matrix-like, with current implementation
+      });
+    });
+
+    describe('mapMatrix', () => {
+      const { mapMatrix } = util;
+
+      it('should map every element to create a new matrix', () => {
+        assert.deepEqual(mapMatrix(matrix(7, 10, 3), x => x + 3), matrix(7, 10, 6), 'increase all numbers');
+      });
+    });
+
+    describe('everyMatrix', () => {
+      const { everyMatrix, mapMatrix } = util;
+
+      it('should return whether every item in the matrix matches the predicate', () => {
+        assert.isOk(everyMatrix(matrix(3, 5, 'hi'), x => x === 'hi'), 'homogenous matrix');
+        assert.isOk(everyMatrix(mapMatrix(matrix(3, 5), (_, x, y) => x + y), (i, x, y) => i === x + y), 'x + y matrix');
+      });
+    });
+
+    describe('someMatrix', () => {
+      const { someMatrix } = util;
+
+      it('should return whether any item in the matrix matches the predicate', () => {
+        assert.isNotOk(someMatrix(matrix(3, 5, 'hi'), x => x !== 'hi'), 'non-presence in homogenous matrix');
+        assert.isOk(someMatrix([[0, 0], [0, 1]], x => x === 1), 'presence in non-homogenous matrix');
+      });
+    });
+
+    describe('cloneMatrix', () => {
+      const { cloneMatrix } = util;
+
+      it('should create a matrix idential to previous', () => {
+        let m = matrix(5, 10, 'y');
+        assert.deepEqual(cloneMatrix(m), m, 'fails for homogenous matrix');
+        m = [[1, 0], [0, 1]];
+        assert.deepEqual(cloneMatrix(m), m, 'fails for non-homogenous matrix');
+      });
+
+      it('should create a matrix with different references', () => {
+        const m = matrix(5, 10, 'y');
+        assert.notStrictEqual(cloneMatrix(m), m, 'matrices are reference-equal');
+        assert.notStrictEqual(cloneMatrix(m)[0], m[0], 'matrix rows are reference-equal');
+      });
+    });
   });
 
   describe('random', () => {
@@ -192,13 +256,13 @@ describe('util', () => {
       random, randomInt, range, isInt,
     } = util;
 
-    it('should work with (max)', () => {
+    it('should create a number in [0, max] for (max)', () => {
       range(0, 100).forEach(() => {
         assert.isAtMost(random(10), 10, 'exceeded max');
         assert.isAtLeast(random(10), 0, 'went below 0');
       });
     });
-    it('int should work with (max)', () => {
+    it('int - should create an int in [0, max] for (max)', () => {
       range(0, 100).forEach(() => {
         assert.isAtMost(randomInt(10), 10, 'exceeded max');
         assert.isAtLeast(randomInt(10), 0, 'went below 0');
@@ -206,13 +270,13 @@ describe('util', () => {
       });
     });
 
-    it('should work with (min, max)', () => {
+    it('should create a number in [min, max] for (min, max)', () => {
       range(0, 100).forEach(() => {
         assert.isAtMost(random(3, 20), 20, 'exceeded max');
         assert.isAtLeast(random(3, 20), 3, 'went below min');
       });
     });
-    it('int should work with (min, max)', () => {
+    it('int - should create an int in [min, max] for (min, max)', () => {
       range(0, 100).forEach(() => {
         assert.isAtMost(randomInt(3, 20), 20, 'exceeded max');
         assert.isAtLeast(randomInt(3, 20), 3, 'went below min');

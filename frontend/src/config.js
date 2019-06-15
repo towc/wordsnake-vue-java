@@ -1,5 +1,5 @@
 // false if empty, true in any other case
-const envToBoolean = (name) => !!process.env[name];
+const envToBoolean = name => !!process.env[name];
 
 const envOrDefault = (name, def) => process.env[name] || def;
 
